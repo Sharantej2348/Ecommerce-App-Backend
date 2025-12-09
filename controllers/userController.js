@@ -115,6 +115,7 @@ export const getProfileController = async(req, res) => {
     }
 }
 
+// LOGOUT PROFILE
 export const logoutController = async(req, res) => {
     try {
         res.status(200)
@@ -133,6 +134,81 @@ export const logoutController = async(req, res) => {
         res.status(500).send({
             success: false,
             message: "Error in Logout API",
+            error
+        })
+    }
+}
+
+// UPDATE PROFILE
+export const updateProfileController = async(req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id)
+        if(!user){
+            res.status(404).send({
+                success: false,
+                message: "User Not found"
+            })
+        }
+        const {name, email, address, city, country, phone} = req.body
+
+        // Validation + Update 
+        if(name) user.name = name
+        if(email) user.email = email
+        if(address) user.address = address
+        if(city) user.city = city
+        if(country) user.country = country
+        if(phone) user.phone = phone
+
+        //  Save User
+        await user.save()
+        res.status(200).send({
+            success: true,
+            message: "User Profile Updated Successfully"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error in Update Profile API",
+            error
+        })
+    }
+}
+
+// UPDATE PASSWORD
+export const updatePasswordController = async(req, res) => {
+    try {
+        const user = await userModel.findById(req.user._id)
+        const {oldPassword, newPassword} = req.body
+
+        // Validation
+        if(!oldPassword || !newPassword){
+            return res.status(500).send({
+                success: false,
+                message: "Please Provide all fields"
+            })
+        }
+
+        // Check old password
+        const isMatch = await bcrypt.compare(oldPassword, user.password)
+        if(!isMatch){
+            return res.status(500).send({
+                success: false, 
+                message: "Invald old password"
+            })
+        }
+        
+        user.password = await bcrypt.hash(newPassword, 10)
+        await user.save()
+        res.status(200).send({
+            success: true,
+            message: "Password Updated Successfully"
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: "Error in Update Password API",
             error
         })
     }
