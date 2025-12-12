@@ -219,6 +219,7 @@ export const updatePasswordController = async(req, res) => {
 // UPDATE USER PROFILE PHOTO
 export const updateProfilePicController = async(req, res) => {
     try {
+        // Find the user by user id
         const user = await userModel.findById(req.user._id)
 
         // Get file from client

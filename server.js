@@ -32,9 +32,15 @@ app.use(cookieParser())
 // ROUTES
 // Route Imports
 import userRoutes from './routes/userRoutes.js'
+import productRoutes from './routes/productRoutes.js'
+
 
 // Routes
+// USER ROUTES
 app.use('/user', userRoutes)
+
+// PRODUCT ROUTES
+app.use('/product', productRoutes)
 
 
 // TEST
