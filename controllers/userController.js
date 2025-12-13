@@ -8,8 +8,8 @@ import { getDataUri } from '../utils/features.js';
 // REGISTRATION
 export const registerController = async(req, res) => {
     try {
-        const {name, email, password, address, city, country, phone} = req.body;
-        if(!name || !email || !password || !city || !address || !country || !phone){
+        const {name, email, password, address, city, country, phone, answer} = req.body;
+        if(!name || !email || !password || !city || !address || !country || !phone || !answer){
             return res.status(500).send({
                 success: false,
                 message: "Please provide all fields"
@@ -30,7 +30,7 @@ export const registerController = async(req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Create User
-        const user = await userModel.create({name, email, password: hashedPassword, address, city, country, phone})
+        const user = await userModel.create({name, email, password: hashedPassword, address, city, country, phone, answer})
 
         res.status(201).send({
             success: true,
@@ -248,5 +248,40 @@ export const updateProfilePicController = async(req, res) => {
             message: "Error in Update Profile Picture API",
             error
         })
+    }
+}
+
+// FORGOT PASSWORD
+export const forgotPasswordController = async(req, res) => {
+    try {
+        const { email, newPassword, answer} = req.body
+        if(!email || !newPassword || !answer){
+            return res.status(500).send({
+                success: false,
+                message: "Please provide all fields"
+            })
+        }
+        const user = await userModel.findOne({email, answer})
+        if(!user){
+            return res.status(404).send({
+                success: false,
+                message: "Invalid User or Answer"
+            })
+        }
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+        user.password = hashedPassword
+        await user.save()
+        res.status(200).send({
+            success: true, 
+            message: "Your Password has been reset, please login"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Erro in Forgot Password API",
+            error
+        })
+        
     }
 }
