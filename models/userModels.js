@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
         url: {
             type: String
         }
+    },
+    role: {
+        type: String,
+        default: "User"
     }
 }, {timestamps: true});
 
