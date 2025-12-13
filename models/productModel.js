@@ -15,8 +15,12 @@ const productSchema = new mongoose.Schema({
     },
     stock: {
         type: Number,
-        required: [true, "Stock is required"]
+        required: [true, "Product Qauantity is required"]
     },
+    // quantity: {
+    //     type: Number,
+    //     required: [true, "Stock is required"]
+    // },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category"

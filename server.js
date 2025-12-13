@@ -34,6 +34,7 @@ app.use(cookieParser())
 import userRoutes from './routes/userRoutes.js'
 import productRoutes from './routes/productRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 
 // Routes
@@ -45,6 +46,9 @@ app.use('/product', productRoutes)
 
 // CATEGORY ROUTES
 app.use('/category', categoryRoutes)
+
+// ORDER ROUTES
+app.use('/orders', orderRoutes)
 
 
 // TEST
