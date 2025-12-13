@@ -3,7 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import cloudinary from 'cloudinary'
+import cloudinary from 'cloudinary';
+import { Stripe } from 'stripe';
 
 import connectDB from './config/database.js';
 
@@ -12,6 +13,10 @@ dotenv.config();
 
 // Connect Database
 connectDB();
+
+// Stripe Configuration
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
 
 // Cloudinary Config
 cloudinary.v2.config({

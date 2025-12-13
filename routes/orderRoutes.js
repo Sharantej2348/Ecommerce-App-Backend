@@ -1,6 +1,6 @@
 import express from 'express'
 import { isAuth } from '../middlewares/authMiddleware.js';
-import { createOrderController, getMyOrdersController, getOrderOnIdController } from '../controllers/orderController.js';
+import { createOrderController, getMyOrdersController, getOrderOnIdController, paymentsController } from '../controllers/orderController.js';
 
 const router = express.Router()
 
@@ -13,5 +13,7 @@ router.get('/my-orders', isAuth, getMyOrdersController)
 // GET SINGLE ORDER
 router.get('/my-orders/:id', isAuth, getOrderOnIdController)
 
+// ACCEPT PAYMENT THROUGH STRIPE
+router.post('/payments', isAuth, paymentsController)
 export default router;
 
