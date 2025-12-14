@@ -82,7 +82,7 @@ export const createProductController = async(req, res) => {
         console.log(error);
         res.status(500).send({
             success: false,
-            message: "Error in Get All Products API",
+            message: "Error in Create Product API",
             error
         })
         
@@ -236,6 +236,48 @@ export const deleteProductController = async(req, res) => {
         res.status(500).send({
             success: false,
             message: "Error in Delete Product API",
+            error
+        })
+    }
+}
+
+
+// CREATE PRODUCT REVIEW
+export const productreviewController = async(req, res) => {
+    try {
+        const {comment, rating} = req.body
+        // Find Product
+        const product = await productModel.findById(req.params.id)
+
+        // check Previous Review
+        const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString())
+        if(alreadyReviewed){
+            return res.status(400).send({
+                success: false,
+                message: "Product already reviewed"
+            })
+        }
+
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id
+        }
+        product.reviews.push(review)
+        product.numReviews = product.reviews.length
+        product.rating = product.reviews.reduce((accumulator, item) => item.rating + accumulator, 0) / product.reviews.length
+
+        await product.save()
+        res.status(200).send({
+            success: true,
+            message: "Review Added Successfully"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error in Create Review API",
             error
         })
     }

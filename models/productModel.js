@@ -1,5 +1,26 @@
 import mongoose from "mongoose";
 
+// REVIEW MODEL
+const reviewSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, "Name is required"]
+    },
+    rating: {
+        type: Number, 
+        default: 0
+    },
+    comment: {
+        type: String
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, "User is required"]
+    }
+}, {timestamps: true})
+
+// PRODUCT MODEL
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -17,10 +38,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Product Qauantity is required"]
     },
-    // quantity: {
-    //     type: Number,
-    //     required: [true, "Stock is required"]
-    // },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category"
@@ -28,7 +45,16 @@ const productSchema = new mongoose.Schema({
     images: [{
         public_id: String,
         url: String
-    }]
+    }],
+    reviews: [reviewSchema],
+    rating: {
+        type: Number,
+        default: 0
+    },
+    numReviews: {
+        type: Number, 
+        default: 0
+    }
 }, {timestamps: true})
 
 const productModel = mongoose.model("Product", productSchema)

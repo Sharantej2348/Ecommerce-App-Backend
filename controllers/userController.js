@@ -8,7 +8,7 @@ import { getDataUri } from '../utils/features.js';
 // REGISTRATION
 export const registerController = async(req, res) => {
     try {
-        const {name, email, password, address, city, country, phone, answer} = req.body;
+        const {name, email, password, address, city, country, phone, answer, role} = req.body;
         if(!name || !email || !password || !city || !address || !country || !phone || !answer){
             return res.status(500).send({
                 success: false,
@@ -30,7 +30,7 @@ export const registerController = async(req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Create User
-        const user = await userModel.create({name, email, password: hashedPassword, address, city, country, phone, answer})
+        const user = await userModel.create({name, email, password: hashedPassword, address, city, country, phone, answer, role})
 
         res.status(201).send({
             success: true,
@@ -282,6 +282,5 @@ export const forgotPasswordController = async(req, res) => {
             message: "Erro in Forgot Password API",
             error
         })
-        
     }
 }

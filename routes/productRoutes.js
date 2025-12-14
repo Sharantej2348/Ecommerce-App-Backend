@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProductController, deleteProductController, deleteProductImageController, getAllProductsController, getSingleProductController, updateProductController, updateProductImageController } from '../controllers/productController.js';
+import { createProductController, deleteProductController, deleteProductImageController, getAllProductsController, getSingleProductController, productreviewController, updateProductController, updateProductImageController } from '../controllers/productController.js';
 import { isAdmin, isAuth } from '../middlewares/authMiddleware.js';
 import { singleUpload } from '../middlewares/multer.js';
 
@@ -13,7 +13,7 @@ router.get('/get-all', getAllProductsController)
 router.get('/:id', getSingleProductController)
 
 // CREATE NEW PRODUCT
-router.post('/create', isAuth, isAdmin, singleUpload, createProductController)
+router.post('/create', isAuth, singleUpload, createProductController)
 
 // UPDATE PRODUCT
 router.put('/update/:id', isAuth, isAdmin, updateProductController)
@@ -26,6 +26,9 @@ router.delete('/delete-image/:id', isAuth, isAdmin, deleteProductImageController
 
 // DELETE PRODUCT
 router.delete('/delete/:id', isAuth, isAdmin, deleteProductController)
+
+// REVIEW PRODUCT
+router.put('/:id/review', isAuth, productreviewController)
 
 
 export default router;
